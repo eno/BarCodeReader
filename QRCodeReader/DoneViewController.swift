@@ -65,7 +65,7 @@ var products: String!
                             "title: \(self.tit!)\n" +
                             "msrp: $\(self.msrp!)")
                     }else{
-                        self.txt.text="not found in DB: \(self.products)"
+                        self.txt.text="not found in DB: \(self.products!)"
                     }
                     
                 }
