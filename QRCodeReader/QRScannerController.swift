@@ -11,7 +11,7 @@ class QRScannerController: UIViewController {
 
     @IBOutlet var messageLabel:UILabel!
     @IBOutlet var topbar: UIView!
-    
+    var products: String!
     var captureSession = AVCaptureSession()
     
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -104,11 +104,8 @@ class QRScannerController: UIViewController {
         let alertPrompt = UIAlertController(title: "Open App", message: "You're going to open \(decodedURL)", preferredStyle: .actionSheet)
         let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertActionStyle.default, handler: { (action) -> Void in
             
-            if let url = URL(string: decodedURL) {
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }
+            //perform segue
+            self.performSegue(withIdentifier: "done", sender: self)
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
@@ -119,6 +116,13 @@ class QRScannerController: UIViewController {
         present(alertPrompt, animated: true, completion: nil)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //segue.destination is important
+        guard let destination = segue.destination as? DoneViewController else {return}
+        destination.products = products
+        
+        //check login success here
+    }
 }
 
 extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
@@ -140,8 +144,10 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
             if metadataObj.stringValue != nil {
+                products = metadataObj.stringValue
                 launchApp(decodedURL: metadataObj.stringValue!)
                 messageLabel.text = metadataObj.stringValue
+                
             }
         }
     }
