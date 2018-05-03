@@ -3,7 +3,7 @@
 //  QRCodeReader
 //
 //  Created by eno o udo jr on 5/3/18.
-//  Copyright © 2018 AppCoda. All rights reserved.
+
 //
 
 import UIKit
